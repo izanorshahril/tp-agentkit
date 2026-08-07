@@ -1,0 +1,274 @@
+---
+description: "TP-AgentKit Full Protocol"
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# TP-AgentKit Protocol
+
+## Critical Rules (Supersedes All Other Instructions)
+
+1. **DO NOT skip any steps** - even in Agent Mode
+2. **ALWAYS ask first which revision to use, or whether a new revision copy should be created, before any TP copy or edit**
+3. **DEFAULT to the revision-copy workflow** in `.claude/rules/workflows.md`: keep the source folder unchanged and edit only the confirmed working copy
+4. **ALWAYS present plan** and wait for user approval
+5. **NEVER execute** without explicit confirmation
+
+Failure to follow this protocol is considered a critical error.
+
+---
+
+## Workflow Steps
+
+1. **Understand user intent** - Ask clarifying questions if needed and confirm revision handling before TP edits
+2. **Draft TASK.md** - Create `.claude/artifacts/current_task/TASK.md` based on user's request when a structured task note is useful
+3. **Read knowledge** - Check `.claude/knowledge/` and `.claude/rules/workflows.md`; for maintainer work on `.claude`, docs, tasks, or artifacts, classify focus first with `.claude/knowledge/focus_boundaries.md`
+4. **Plan** - Create `.claude/artifacts/current_task/plan.md`
+5. **Present plan** - Show plan to user and WAIT for approval
+6. **Execute** - Apply the plan directly, using `.claude/skills/` and focused edits as needed
+7. **Verify** - Self-review and log in `.claude/artifacts/current_task/walkthrough.md`
+8. **Complete** - Update task status and capture reusable feedback in artifacts or knowledge candidates
+
+---
+
+## Core Principles
+
+### Autonomous Execution
+- **Act, don't ask** for trivial decisions
+- **Ask only when** there are genuine ambiguities, conflicts, or high-risk operations
+- **Self-correct** by reviewing output against rules before completing
+
+### Focused Execution Pattern
+
+Break complex tasks into focused work lanes when useful:
+- flow work: TPL/STPL/OTPL flow modifications
+- limits work: limit sheet management
+- code work: C++ test implementation
+- bin work: bin definition management
+- review work: validation and evaluation
+
+These are planning lanes, not tracked agent-definition files. Use the protocol, skills, and inspected source directly.
+
+### Knowledge Trust Hierarchy
+
+Trust order (highest to lowest):
+1. `.claude/rules/workflows.md` - Workflow policies
+2. `.claude/knowledge/*.md` - Verified knowledge patterns
+3. `testprogram/` - User test program(s) and inspected source of truth
+4. `.claude/artifacts/current_task/` - Task-local notes and working artifacts (agent-generated; verify against source)
+5. Online resources
+
+---
+
+## Bootstrap Protocol
+
+### Step 1: Understand User Intent
+
+```
+IF user provides task in natural language:
+    - Ask clarifying questions if ambiguous
+    - Identify: what, where, platform, constraints
+    - Draft `.claude/artifacts/current_task/TASK.md` with structured requirements when needed
+    - Confirm understanding before proceeding
+```
+
+### Step 2: Load Context
+
+```
+READ: .claude/artifacts/current_task/TASK.md      - Current task note (create if needed)
+READ: .claude/knowledge/platform.md               - Workspace platform details
+READ: .claude/rules/workflows.md                  - Project-specific workflow rules
+IF maintainer work is on `.claude/`, docs, tasks, or artifacts:
+    READ: .claude/knowledge/focus_boundaries.md   - TP-AgentKit vs external-tooling classifier
+```
+
+### Step 3: Load Skills & Knowledge
+
+```
+READ: .claude/skills/_registry.md   - Available tools (check status!)
+READ: .claude/knowledge/*.md        - Verified knowledge
+READ: .claude/rules/workflows.md    - Workflow policies
+```
+
+### Step 4: Discover Test Programs
+
+```
+testprogram/ may be gitignored or may not yet contain the requested revision folder.
+DO NOT conclude missing from a single exact-path check.
+USE: recursive discovery on key files (`*.ls`, `*.tpl`) + keyword matching, then fallback checks in `.claude/artifacts/current_task/` and `references/`.
+FOLLOW: .claude/rules/workflows.md (Test Program Discovery)
+```
+
+### Step 5: Check Task State
+
+```
+IF .claude/artifacts/current_task/ EXISTS:
+    READ: INDEX.md and the primary active artifact named there  - Resume from checkpoint
+ELSE:
+    CREATE: .claude/artifacts/current_task/
+```
+
+### Step 6: Prepare Safe Working Target
+
+```
+IF modifying anything under testprogram/<program>/:
+    ASK: which revision to use, or whether a new revision copy should be created
+    DEFAULT: copy the confirmed source folder to a new revision folder and edit only the copy
+    KEEP: source folder unchanged for comparison
+    ONLY IF user explicitly requests in-place work or backup-based handling:
+        CREATE: testprogram/<program>_backup_<YYYYMMDD>/   (date only, no time)
+        VERIFY: snapshot exists before proceeding
+```
+
+### Step 7: Confirmation Gate (MANDATORY)
+
+BEFORE executing any file modifications:
+
+1. Present plan summary to user
+2. List all files that will be modified
+3. Confirm source folder and working target folder
+4. Confirm whether the workflow is revision copy or in-place backup
+5. WAIT for explicit user approval
+6. Accepted responses: "approved", "proceed", "go ahead", "yes"
+7. DO NOT proceed without confirmation
+
+---
+
+## Directory Structure & Ownership
+
+```
+workspace/                           # May be renamed by user
+|
+|-- AGENTS.md                        # Quick reference (points to .claude)
+|-- README.md                        # User documentation
+|
+|-- testprogram/                     # USER + AGENT: Test program(s)
+|
++-- .claude/                         # Agent configuration & runtime
+    |-- rules/                       # Protocol rules (.mdc) + workflows.md
+    |-- skills/                      # Skill/tool definitions
+    |-- knowledge/                   # Knowledge base (verified patterns)
+    |-- artifacts/                   # Plans, walkthroughs, eval reports, and task-local notes
+```
+
+### Folder Ownership
+
+| Folder | Managed By | Purpose |
+|--------|------------|---------|
+| `testprogram/` | User + Agent | Test program source(s) (agent modifies with approval) |
+| `.claude/rules/` | Maintainer | Active protocol and workflow rules |
+| `.claude/skills/` | Maintainer | Skill/tool definitions |
+| `.claude/knowledge/` | Maintainer | Verified knowledge patterns |
+| `.claude/artifacts/` | Agent | Plans, walkthroughs, eval reports, and task-local notes |
+
+**Important**: Users should ONLY edit `testprogram/`. Agent generates `.claude/artifacts/` and reads from `.claude/knowledge/` and `.claude/rules/`.
+
+---
+
+## Task Execution Phases
+
+### Phase A: Planning
+1. Analyze task from `.claude/artifacts/current_task/TASK.md` when present
+2. Discover test programs via recursive key-file + keyword flow (see `.claude/rules/workflows.md`); do not rely on a single exact-path check for `testprogram/`
+3. Identify affected files in `testprogram/<program>/`
+4. For repo-maintenance or toolchain work, classify `TP-AgentKit` versus `external tooling` with `.claude/knowledge/focus_boundaries.md`, then study the matching patterns in `.claude/knowledge/`
+5. Create plan in `.claude/artifacts/current_task/plan.md`
+6. Present plan to user and WAIT for approval
+
+### Phase B: Execution
+- Apply the plan directly using skills, focused edits, and targeted validation
+- Parallelize only independent reads, comparisons, and validations where useful
+- Log actions in `.claude/artifacts/current_task/walkthrough.md`
+
+### Phase C: Review
+- Validate changes against the requested scope and the relevant workflow constraints
+- Scores: Completeness, Correctness, Efficiency, Documentation
+- Generates `.claude/artifacts/current_task/eval_report.md`
+
+### Phase D: Quality Capture
+- Capture constructive feedback and reusable lessons from the completed work
+- Generate task-specific notes or improvement records when applicable
+
+---
+
+## Improvement Loop
+
+### What To Capture
+- Corrections to agent behavior
+- Missing workflow steps
+- Platform-specific patterns
+- Error resolutions
+- User preferences
+
+### What To Ignore
+- General questions
+- Status inquiries
+- Casual conversation
+
+### Core File Protection
+
+**NEVER auto-modify**:
+- `AGENTS.md`
+- `README.md`
+- `.claude/skills/**` (core skills)
+- `.claude/rules/*.mdc` (protocol rules)
+- `.claude/knowledge/*.md` (knowledge base)
+
+All improvements require **human review** before integration.
+
+---
+
+## Platform Support
+
+### Advantest T2000 (OTPL)
+```yaml
+flows: [*.tpl, *.stpl, *.otpl]
+limits: [*.ls]
+bins: [*.bdefs]
+code: [TestClasses/**/*.cpp]
+```
+
+### Advantest T2000 (RDK)
+```yaml
+flows: [*.tpl]
+limits: [*.ls]
+code: [TestFunctions/**/*.cpp]
+```
+
+### Advantest V93000 (SmarTest)
+```yaml
+flows: [*.tf]
+limits: [*.txt, *.csv]
+code: [testmethod/**/*.cpp]
+```
+
+### Teradyne Flex (IG-XL)
+```yaml
+flows: [*.igxl, *.vb]
+limits: [*.txt]
+code: [*.vb, *.vbs]
+```
+
+---
+
+## Model Selection (IDE-Dependent)
+
+Different task focuses may benefit from different models:
+
+| Task Focus | Recommended Model | Rationale |
+|------------|-------------------|-----------|
+| Planning / orchestration | Most capable (e.g., Claude Opus) | Complex reasoning |
+| Implementation | Balanced (e.g., Claude Sonnet) | Code generation |
+| Review / validation | Analytical model | Validation focus |
+
+**Note**: In Cursor, use the Task tool's `model` parameter when available.
+
+---
+
+## Workspace Naming
+
+The workspace folder may be renamed by users (e.g., `UQ29_relative_tests/` instead of `tp-agentkit/`). This does NOT affect agent operation - all paths are relative to workspace root.
+
+---
+
+*This protocol ensures autonomous test program development with safety gates and quality controls.*

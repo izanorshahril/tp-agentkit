@@ -1,0 +1,45 @@
+# ============================================
+# TP-AgentKit .gitignore
+# ============================================
+
+# Agent runtime (ephemeral, not tracked)
+.claude/artifacts/**
+
+# User workspace content (varies per project)
+testprogram/**
+references/**
+!testprogram/PLACE_YOUR_TEST_PROGRAM_HERE.txt
+
+# Local developer workspace state
+.venv/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+*.code-workspace
+
+# Personal notes
+my_*.txt
+*.sh
+/__*.py
+/.tmp/
+
+# Build artifacts
+*.pyc
+__pycache__/
+*.pdb
+*.dll
+*.lib
+*.exp
+*.sdf
+*.suo
+*.user
+ipch/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# placeholder files
+!ADD_YOUR_REFERENCE_FILES_HERE.txt
+!PLACE_YOUR_TEST_PROGRAM_HERE.txt
+!AUTO_BACKUP_FOLDER.txt

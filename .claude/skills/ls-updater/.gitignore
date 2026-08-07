@@ -1,0 +1,6 @@
+# input output files
+*.ls
+*.csv
+*.bak
+*.log
+ref/*

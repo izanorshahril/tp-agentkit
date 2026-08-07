@@ -1,0 +1,31 @@
+---
+description: "TP-AgentKit Resource Pointers"
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# AgentKit Resources
+
+## Protocol
+Full protocol in `.claude/rules/02-protocol.mdc`.
+
+## Execution Guidance
+Use `.claude/rules/02-protocol.mdc` plus `.claude/skills/_registry.md` and `.claude/knowledge/_registry.md` as the maintained execution surface.
+For maintainer work on `.claude/`, docs, tasks, or artifacts, classify the request first with `.claude/knowledge/focus_boundaries.md`.
+Tracked agent-definition files are not part of the active framework.
+
+## Skill Definitions
+Read `.claude/skills/_registry.md` for available skills.
+CHECK STATUS before invoking - "planned" skills are NOT implemented.
+
+## Knowledge Base
+Domain knowledge in `.claude/knowledge/*.md`.
+Use `.claude/knowledge/focus_boundaries.md` when separating TP-AgentKit guidance from external-tooling guidance.
+
+## Workflow Rules
+Policies in `.claude/rules/workflows.md`.
+
+## Trust Hierarchy
+.claude/rules/ > .claude/knowledge/ > testprogram/ > .claude/artifacts/current_task/ > Online
+
+Use task-local material in `.claude/artifacts/current_task/` as support context, not as a source of truth above inspected TP source.
