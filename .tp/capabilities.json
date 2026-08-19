@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1",
+  "purpose": "Selection hints for runtime workflows; these are not a fixed execution plan.",
+  "capabilities": [
+    {
+      "id": "discover",
+      "kind": "read",
+      "signals": ["unknown workspace", "missing entry point", "ambiguous inputs"],
+      "outputs": ["workspace facts", "candidate sources", "candidate flows"]
+    },
+    {
+      "id": "map-source",
+      "kind": "read",
+      "signals": ["test program", "configuration", "flow", "limits", "bins", "code"],
+      "outputs": ["dependency map", "active path", "variant notes"]
+    },
+    {
+      "id": "compare-evidence",
+      "kind": "review",
+      "signals": ["review", "diff", "CSV", "workbook", "log", "baseline"],
+      "outputs": ["matched facts", "mismatches", "evidence references"]
+    },
+    {
+      "id": "plan-change",
+      "kind": "reason",
+      "signals": ["edit", "implement", "update", "refactor", "migrate"],
+      "requires": ["target", "source of truth", "scope", "approval boundary"],
+      "outputs": ["runtime task graph", "decision questions", "change set"]
+    },
+    {
+      "id": "preserve-structure",
+      "kind": "edit",
+      "signals": ["limit-only", "smallest change", "revision update"],
+      "outputs": ["minimal delta", "occurrence check", "tail check"]
+    },
+    {
+      "id": "validate",
+      "kind": "verify",
+      "signals": ["after edit", "release", "completion", "parser", "simulator", "launch"],
+      "outputs": ["checks", "evidence", "validation gaps"]
+    },
+    {
+      "id": "maintain-context",
+      "kind": "save",
+      "signals": ["long task", "interruption", "sibling variant", "repeated discovery", "handoff"],
+      "outputs": ["compact context", "decision record", "resume point"]
+    },
+    {
+      "id": "independent-review",
+      "kind": "review",
+      "signals": ["high risk", "release-facing", "broad migration", "multiple plausible paths"],
+      "outputs": ["adversarial findings", "convergence status", "open risks"]
+    }
+  ]
+}

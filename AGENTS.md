@@ -1,82 +1,101 @@
 ---
 name: TP-AgentKit
-version: "5.0"
-description: "Autonomous Test Program Development Framework"
+version: "6.0"
+description: "Context-first test program engineering guidance"
 ---
 
-# TP-AgentKit
+# TP-AgentKit Maintainer Guide
 
-> Maintainer and agent quick reference. User onboarding lives only in `README.md`.
+This file contains the technical repository contract. Read `.tp/directive.md`
+before working in the repository. The root [README.md](README.md) is the only
+user-facing onboarding document.
 
----
+## Control surface
 
-## Open First
+- `.tp/directive.md` is the only always-on operating contract.
+- `.tp/context.schema.json` defines the optional machine-readable context shape.
+- `.tp/capabilities.json` provides runtime selection hints, not fixed workflows.
+- `.tp/knowledge.md` contains compact reusable TP safety knowledge.
+- `.tp/state/` and `.tp/session/` are optional generated runtime locations and are
+	ignored by Git.
 
-| Need | Primary home | Use when |
-|------|--------------|----------|
-| User quickstart and prompt starters | `README.md` | onboarding or first-turn user guidance |
-| Active workflow and edit policy | `.claude/rules/workflows.md` | any TP task or repo-maintenance workflow decision |
-| Risk-task pressure-test guidance | `.claude/skills/grill-me/SKILL.md` | after a draft plan exists for medium-risk or high-risk TP work |
-| Completion evidence gate | `.claude/skills/verification-before-completion/SKILL.md` | before saying a TP task is complete, validated, or ready to release |
-| Knowledge selector | `.claude/knowledge/_registry.md` | before planning or broad discovery |
-| Focus boundary selector | `.claude/knowledge/focus_boundaries.md` | maintainer work that may be about TP-AgentKit itself or about surrounding tooling such as VS Code, Copilot, Python, or GitHub |
-| Constraints and protected areas | `.claude/knowledge/constraints.md` | before edits, cleanup, or risky moves |
-| Skill catalog | `.claude/skills/_registry.md` | to find callable or behavior-only skills |
-| Command presets | `.claude/tasks.json` | to run maintained repo commands |
-| Repo-maintenance closeout | `.claude/knowledge/repo_maintenance_closeout.md` | after work on docs, rules, skills, knowledge, tasks, or artifacts |
-| Active task resume surface | `.claude/artifacts/current_task/INDEX.md` | to resume or update the current working set; start at the top `Resume Now` section |
+`.tp` is intentionally non-standard and local to this repository. Do not add a
+compatibility directory, fixed payload layout, task preset, or script runner.
 
-Questioning route:
+## Operating model
 
-- use `.claude/rules/workflows.md` for the repo-wide rule: inspect recoverable facts first, ask the user only when the remaining branch still changes execution, validation scope, or release confidence
-- use `.claude/skills/grill-me/SKILL.md` when that questioning needs to become an explicit pressure-test for medium-risk or high-risk work
+Before substantive work begins, the agent confirms the intake with the user. The
+confirmation covers the intended outcome, scope, available supporting documents,
+privacy constraints, missing-evidence risks, and the first validation boundary.
+The user may insist on proceeding without supporting documents; that decision is
+recorded as an evidence gap and does not block the task.
 
-This file routes maintainers to the owning surface. It is not the source of truth for workflow policy, reusable knowledge, skill behavior, or task history.
+After confirmation, the agent treats the workspace as unknown until it has
+inspected the real files, entry points, variants, dependencies, and
+source-of-truth inputs. It then builds a runtime task graph around the current
+evidence:
 
-### IDE Support
+1. Inspect the workspace and request.
+2. Ask only decision-relevant questions.
+3. Decide the smallest capability set and execution path.
+4. State the target, source of truth, scope, and approval boundary before edits.
+5. Act, validate at the narrowest useful boundary, and repeat when needed.
+6. Finish with evidence, changed paths, validation gaps, risks, and the next
+	 action.
 
-TP-AgentKit standardizes on `.claude/`.
-Cursor and VS Code both support `.claude` natively, with no extra IDE-specific configuration.
+Capabilities are selected and composed at runtime. Do not turn a one-off program
+difference into a repository script or a universal workflow template.
 
-### Path Conventions
+## Intake and artifact handling
 
-To reduce repetition in internal docs under `.claude/`, use relative paths when possible.
+Suggest supporting material according to the task rather than requesting a full
+document package. Relevant examples are:
 
-- In `.claude/skills/*.md`: prefer `./` for skill-local paths
-- Use absolute-style `.claude/...` paths in top-level docs (`AGENTS.md`, `README.md`) for readability
+- an older TP or release baseline for comparison
+- product or test specifications and official reference documentation
+- instructions received by email or other approved internal channels
+- schematics, datasheets, configuration notes, and flow documentation
+- CSV or workbook exports, tester logs, and known-good result sets
 
-Execution guidance is now carried by `.claude/rules/`, `.claude/skills/`, and `.claude/knowledge/` directly. Tracked agent-definition files are no longer part of the maintained framework surface.
+The agent should open and inspect artifacts in their existing formats when local
+support exists. When a format is unsupported, it should use an existing local
+tool or write a focused reader or script so the user is not asked to perform a
+manual conversion. Any generated intermediate or output artifact must be
+identified, kept separate from the source, and validated at the appropriate
+boundary.
 
-## Maintainer Sequence
+Tool installation requires the user's consent. Before proposing it, inspect the
+available environment and approved alternatives. Follow corporate proxy,
+firewall, package-source, administrator, licensing, and data-privacy rules; do
+not bypass controls or send artifacts to external services without explicit
+authorization.
 
-- classify maintainer work as `TP-AgentKit` or `external tooling` first; use `.claude/knowledge/focus_boundaries.md` when the boundary is unclear
-- read `.claude/knowledge/_registry.md` first
-- load the matching rule or knowledge file before planning
-- when resuming maintainer work, open the top of `.claude/artifacts/current_task/INDEX.md` before scanning older follow-through notes
-- when the user asks for the same change on a sibling TP variant, reuse the prior variant's verified findings first and widen discovery only where the new flow differs
-- for medium-risk or high-risk tasks, run a short `grill-me` pass after the draft plan and before approval or execution
-- create a compact reusable checkpoint before broad follow-on variant work when the first pass already established a strong risk map
-- before any completion, validation, or release claim, run `verification-before-completion`
-- inspect the codebase or TP only after the right guidance is loaded
-- keep user-facing instruction in `README.md`, not here
-- keep durable policy in rules or knowledge, not in task artifacts
+## Context contract
 
-## Extension Points
+Persist context only when it benefits the current task or a later handoff. Save
+stable, evidence-backed facts and task deltas rather than empty plans, indexes,
+walkthroughs, copied transcripts, or large tool output. A useful checkpoint can
+recover the intent, facts, decisions, changed paths, outputs, validation,
+open risks, and next action. Never persist secrets or private identifiers unless
+the user explicitly requires it.
 
-- new workflow or enforcement rule: `.claude/rules/`
-- new durable cross-task guidance: `.claude/knowledge/` plus `_registry.md`
-- new callable or behavior-local capability: `.claude/skills/<skill>/` with `SKILL.md`, implementation, `test_skill.py`, and registry entry
-- new internal shared support module for multiple skills: `.claude/skills/_*.py`; keep it non-callable and move only repo-generic helper logic there
-- new task-local note or handoff: `.claude/artifacts/current_task/`
+## Safety invariants
 
-Keep skill folders flat and use the registries and indexes to separate `TP-AgentKit` focus from `external tooling` focus.
+- For edits, obtain approval after the target and plan are understood. Repository
+	maintenance may use the user's explicit approval of the maintenance scope.
+- Prefer a copied revision when the source is a baseline or release artifact,
+	unless the user explicitly chooses in-place work.
+- Follow dependency order discovered in the program. Never invent tests, imports,
+	limits, bins, or flow references.
+- For limit changes, verify scale, unit, tuple meaning, structure preservation,
+	occurrence counts, neighboring rows, and the file tail.
+- Compare each variant with its own baseline; names alone do not prove
+	equivalence.
+- Report unverified parser, simulator, launch, or production evidence directly.
 
-Do not let artifacts become the long-term source of truth when the content really belongs in rules, knowledge, or a skill.
+## Documentation boundary
 
-## Repo-Maintenance Closeout
-
-Use `.claude/knowledge/repo_maintenance_closeout.md` for the maintained closeout path and `.claude/tasks.json` for the command presets that run it.
-
----
-
-*Keep user onboarding in `README.md`. Keep maintainer routing in `AGENTS.md`. Keep real policy, knowledge, skill behavior, tasks, and task history under `.claude/`.*
+Keep common-user onboarding, capabilities, use cases, and task-start guidance in
+the root [README.md](README.md). Keep implementation mechanics, `.tp` contract
+details, safety invariants, and maintainer constraints here. Do not create a
+second README inside `.tp`.

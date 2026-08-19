@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "tp-agentkit/context",
+  "title": "TP-AgentKit Context",
+  "type": "object",
+  "required": ["version", "intent", "facts", "decisions", "validation", "resume"],
+  "properties": {
+    "version": { "type": "string" },
+    "updated_at": { "type": "string" },
+    "intent": {
+      "type": "object",
+      "required": ["mode", "request"],
+      "properties": {
+        "mode": { "enum": ["analysis-only", "review-only", "edit", "unknown"] },
+        "request": { "type": "string" },
+        "scope": { "type": "string" },
+        "environment": { "type": "string" },
+        "active_flow": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "privacy": {
+      "type": "object",
+      "properties": {
+        "handling": { "enum": ["none", "exclude", "redact", "unknown"] },
+        "categories": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "role"],
+        "properties": {
+          "path": { "type": "string" },
+          "role": { "type": "string" },
+          "revision": { "type": "string" },
+          "hash": { "type": "string" },
+          "observed_at": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["key", "value", "evidence"],
+        "properties": {
+          "key": { "type": "string" },
+          "value": {},
+          "evidence": { "type": "array", "items": { "type": "string" } },
+          "confidence": { "enum": ["observed", "inferred", "user-confirmed"] }
+        },
+        "additionalProperties": true
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["question", "answer", "source"],
+        "properties": {
+          "question": { "type": "string" },
+          "answer": {},
+          "source": { "enum": ["user", "workspace", "agent"] },
+          "timestamp": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "properties": {
+        "phase": { "type": "string" },
+        "nodes": { "type": "array", "items": { "type": "object" } },
+        "active_node": { "type": "string" },
+        "completed_nodes": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "kind"],
+        "properties": {
+          "path": { "type": "string" },
+          "kind": { "type": "string" },
+          "summary": { "type": "string" },
+          "hash": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "validation": {
+      "type": "object",
+      "required": ["checks"],
+      "properties": {
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "status"],
+            "properties": {
+              "name": { "type": "string" },
+              "status": { "enum": ["passed", "failed", "partial", "not-run"] },
+              "evidence": { "type": "array", "items": { "type": "string" } },
+              "notes": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "gaps": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["level", "description"],
+        "properties": {
+          "level": { "enum": ["low", "medium", "high", "blocking"] },
+          "description": { "type": "string" },
+          "mitigation": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "resume": {
+      "type": "object",
+      "required": ["next_action"],
+      "properties": {
+        "next_action": { "type": "string" },
+        "blocked_on": { "type": "array", "items": { "type": "string" } },
+        "checkpoint": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
