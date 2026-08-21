@@ -1,45 +1,32 @@
 # TP-AgentKit
 
-Context-first AI guidance for semiconductor test program engineering. Bring a
-real task and its available evidence; TP-AgentKit discovers the workspace and
-chooses the smallest workflow that fits.
+TP-AgentKit helps an AI agent understand and change unfamiliar semiconductor test programs without forcing them into one directory layout or a fixed workflow.
 
-## What it does
+Give the agent the program, evidence, and outcome you care about. It maps the real launch and dependency paths, proposes a safe change, builds task-specific checks, iterates, and reports what is proven.
 
-- **Discovers before deciding**: finds the actual program files, entry points,
-	variants, and source-of-truth inputs instead of assuming a folder layout.
-- **Follows evidence**: maps flows, limits, bins, configuration, code, exports,
-	logs, and baselines to the question being asked.
-- **Protects edits**: identifies the target and approval boundary before
-	mutation, with copied revisions preferred for baselines and release material.
-- **Preserves narrow changes**: keeps structure intact for focused updates and
-	checks touched rows, neighboring content, occurrences, and file tails.
-- **Validates at the right boundary**: runs the narrowest useful checks and
-	states missing parser, simulator, launch, or production evidence clearly.
-- **Adapts to the task**: composes discovery, comparison, planning, editing,
-	validation, and independent review when the evidence calls for them.
-- **Supports interruption and handoff**: retains the decisions and next action
-	needed to continue a long or multi-variant task.
+## Start
 
-## Use it for
+Put the test program and supporting material anywhere inside the workspace, or provide their paths. Then ask naturally:
 
-- Test program and flow analysis
-- Limit, bin, configuration, and code reviews
-- CSV, workbook, log, and baseline comparisons
-- Release-facing change reviews
-- Repository and test-program maintenance
+```text
+Update this revision to 0042 and keep the source unchanged.
+Apply the approved cold limits from this CSV to the matching program.
+Add a companion leakage test beside the existing condition.
+Remove this test from the active flow but retain its implementation.
+Explain why these tests appear in source but not in the datalog.
+Improve this setup sequence without changing measured coverage.
+```
 
-## Start a task
+Include privacy handling when relevant, for example: `Redact private identifiers.` The agent asks once if that is unclear before broad discovery or maintained evidence writing.
 
-Describe the outcome you need in ordinary language. Include any known paths,
-inputs, scope, target variant, privacy constraints, or desired mode such as
-analysis-only, review-only, or edit. The agent will inspect what is actually
-present and ask only questions that affect execution, safety, or validation.
+## What to expect
 
-Edit work pauses for approval before files are changed. Analysis and review work
-can proceed without a mutation approval.
+- Read-only analysis starts from inspected files and evidence.
+- Material edits identify the target, authority, rollback, and verification before mutation.
+- Risky work gets a short pressure-test and an approval gate.
+- Temporary scripts and checkpoints live under `.tp/work/`; they are working state, not permanent tooling.
+- When product understanding should persist, `<PRODUCT>_TP.md` links tester-platform metadata, variants and processes, active program paths, and revision evidence to product-scoped companions such as `<PRODUCT>_PRODUCT.md` and `<PRODUCT>_PCMS.md`.
+- Completion reports separate verified facts from missing simulator, tester, or production evidence.
+- Reusable lessons become living skills or knowledge only after the completed work supports them.
 
-There is no required test-program folder layout, revision naming scheme, or
-local script runner. Technical operating details for maintainers are documented
-in [AGENTS.md](AGENTS.md).
-
+Agent guidance lives in [`AGENTS.md`](AGENTS.md). The `.tp` directory is intentionally tool-neutral even though it is not a standard agent configuration path.

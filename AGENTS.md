@@ -1,101 +1,39 @@
 ---
 name: TP-AgentKit
 version: "6.0"
-description: "Context-first test program engineering guidance"
+description: Dynamic test-program engineering guidance
 ---
 
-# TP-AgentKit Maintainer Guide
+# TP-AgentKit
 
-This file contains the technical repository contract. Read `.tp/directive.md`
-before working in the repository. The root [README.md](README.md) is the only
-user-facing onboarding document.
+Understand the actual test program, make the smallest defensible change, and leave evidence another engineer can follow.
 
-## Control surface
+## Operating loop
 
-- `.tp/directive.md` is the only always-on operating contract.
-- `.tp/context.schema.json` defines the optional machine-readable context shape.
-- `.tp/capabilities.json` provides runtime selection hints, not fixed workflows.
-- `.tp/knowledge.md` contains compact reusable TP safety knowledge.
-- `.tp/state/` and `.tp/session/` are optional generated runtime locations and are
-	ignored by Git.
+1. **Orient.** Read the request and inspect recoverable facts. Ask only when the remaining choice changes the target, authority, validation, or release confidence. Ask once about private identifiers before broad discovery when handling is unknown.
+2. **Map.** Build a task-sized map from the files and references that exist. Follow launch, flow, definition, limit, code, and history edges instead of assuming a directory layout.
+3. **Plan.** Name the exact target, source of truth, invariants, rollback, verification checks, and stop condition. Pressure-test medium-risk and high-risk plans. Obtain explicit approval immediately before a material TP mutation unless the current request already authorizes that exact mutation.
+4. **Execute.** Work in small slices. Write disposable scripts or harnesses under `.tp/work/` when they shorten the feedback loop; keep them task-local and iterate on observed failures.
+5. **Verify.** Re-run deterministic checks after the final edit, inspect the changed files and outputs, and loop until the criterion passes or a stated limit is reached.
+6. **Explain and learn.** Lead with the outcome, show decisive evidence and remaining risk, then promote only verified reusable lessons into a skill or living knowledge.
 
-`.tp` is intentionally non-standard and local to this repository. Do not add a
-compatibility directory, fixed payload layout, task preset, or script runner.
+## Context routing
 
-## Operating model
+- For a TP task, read [`.tp/skills/INDEX.md`](.tp/skills/INDEX.md), then load every matching `SKILL.md` completely before acting.
+- Read [`.tp/knowledge/INDEX.md`](.tp/knowledge/INDEX.md) only when its trigger matches the task; load only the named topic file.
+- Read [`.tp/work/context.md`](.tp/work/context.md) when resuming work or when privacy, user preference, environment capability, or an active checkpoint matters. It is a temporary cache: verify drift-prone facts.
+- Prefer `rg` and the environment over documentation caches for cheap facts such as paths, commands, symbols, and current file structure.
 
-Before substantive work begins, the agent confirms the intake with the user. The
-confirmation covers the intended outcome, scope, available supporting documents,
-privacy constraints, missing-evidence risks, and the first validation boundary.
-The user may insist on proceeding without supporting documents; that decision is
-recorded as an evidence gap and does not block the task.
+## Trust and safety
 
-After confirmation, the agent treats the workspace as unknown until it has
-inspected the real files, entry points, variants, dependencies, and
-source-of-truth inputs. It then builds a runtime task graph around the current
-evidence:
+Current user direction and inspected source outrank cached knowledge. Task artifacts support decisions but never prove source behavior.
 
-1. Inspect the workspace and request.
-2. Ask only decision-relevant questions.
-3. Decide the smallest capability set and execution path.
-4. State the target, source of truth, scope, and approval boundary before edits.
-5. Act, validate at the narrowest useful boundary, and repeat when needed.
-6. Finish with evidence, changed paths, validation gaps, risks, and the next
-	 action.
+- Redact user, person, network, email, host, and account identifiers from maintained examples and evidence unless exact disclosure is necessary and approved.
+- Preserve a recoverable baseline outside the mutation target. Keep the confirmed source unchanged when a revision copy is appropriate.
+- Compare each variant with its own intended baseline. Treat source presence, active-flow reachability, and runtime coverage as separate claims.
+- Match units, scale, environment, identifiers, and dependency edges before changing values or flow.
+- State partial validation plainly. Release readiness is conditional when parser, simulator, tester, or lot evidence is unavailable.
 
-Capabilities are selected and composed at runtime. Do not turn a one-off program
-difference into a repository script or a universal workflow template.
+## Living framework
 
-## Intake and artifact handling
-
-Suggest supporting material according to the task rather than requesting a full
-document package. Relevant examples are:
-
-- an older TP or release baseline for comparison
-- product or test specifications and official reference documentation
-- instructions received by email or other approved internal channels
-- schematics, datasheets, configuration notes, and flow documentation
-- CSV or workbook exports, tester logs, and known-good result sets
-
-The agent should open and inspect artifacts in their existing formats when local
-support exists. When a format is unsupported, it should use an existing local
-tool or write a focused reader or script so the user is not asked to perform a
-manual conversion. Any generated intermediate or output artifact must be
-identified, kept separate from the source, and validated at the appropriate
-boundary.
-
-Tool installation requires the user's consent. Before proposing it, inspect the
-available environment and approved alternatives. Follow corporate proxy,
-firewall, package-source, administrator, licensing, and data-privacy rules; do
-not bypass controls or send artifacts to external services without explicit
-authorization.
-
-## Context contract
-
-Persist context only when it benefits the current task or a later handoff. Save
-stable, evidence-backed facts and task deltas rather than empty plans, indexes,
-walkthroughs, copied transcripts, or large tool output. A useful checkpoint can
-recover the intent, facts, decisions, changed paths, outputs, validation,
-open risks, and next action. Never persist secrets or private identifiers unless
-the user explicitly requires it.
-
-## Safety invariants
-
-- For edits, obtain approval after the target and plan are understood. Repository
-	maintenance may use the user's explicit approval of the maintenance scope.
-- Prefer a copied revision when the source is a baseline or release artifact,
-	unless the user explicitly chooses in-place work.
-- Follow dependency order discovered in the program. Never invent tests, imports,
-	limits, bins, or flow references.
-- For limit changes, verify scale, unit, tuple meaning, structure preservation,
-	occurrence counts, neighboring rows, and the file tail.
-- Compare each variant with its own baseline; names alone do not prove
-	equivalence.
-- Report unverified parser, simulator, launch, or production evidence directly.
-
-## Documentation boundary
-
-Keep common-user onboarding, capabilities, use cases, and task-start guidance in
-the root [README.md](README.md). Keep implementation mechanics, `.tp` contract
-details, safety invariants, and maintainer constraints here. Do not create a
-second README inside `.tp`.
+`.tp` has no bootstrap sequence and prescribes no TP folder scaffold. Add a document only when its pointer and reuse value earn the context or maintenance load. Prefer improving an existing skill over adding a near-duplicate. Permanent scripts require repeated use or deterministic safety value; otherwise keep the useful snippet in the skill and regenerate the harness for the task.
