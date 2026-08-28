@@ -19,6 +19,12 @@ my_*.txt
 /__*.py
 /.tmp/
 
+# Private product sources and task evidence
+/TP/
+/docs/
+/.tp/work/
+/.tp/knowledge/ur78.md
+
 # Build artifacts
 *.pyc
 __pycache__/

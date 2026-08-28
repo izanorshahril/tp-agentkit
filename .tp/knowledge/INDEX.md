@@ -6,7 +6,7 @@ Knowledge records verified facts and decision-changing lessons, not procedures o
 
 | Topic | Load when |
 |---|---|
-| [`test-programs.md`](test-programs.md) | mapping or modifying an unfamiliar ATE test program, especially T2000-style revisions, limits, flows, and runtime coverage |
+| [`test-programs.md`](test-programs.md) | mapping or modifying an unfamiliar ATE test program, especially T2000-style revisions, limits, flows, runtime coverage, and C++ project dependencies |
 
 ## Promotion rule
 

@@ -23,6 +23,8 @@ No positive completion claim without fresh task-specific evidence.
 - **New test:** identity unique; definition, limit, implementation, datalog, bin, setup, and flow agree; original condition preserved when duplicated.
 - **Setup:** state and cleanup hold across pass, fail, retry, abort, and site paths; hardware-dependent behavior uses appropriate evidence.
 - **Analysis:** schema and joins reproducible; totals reconcile; source, reachability, runtime, and inference claims remain distinct.
+- **Reference package:** source hashes and page counts agree; parser configuration and output roles are recorded; required anchors and omission pointers exist; retired names and stale active paths are absent.
+- **Compaction:** the ordered sequence of non-empty source lines is unchanged, and the output remains parseable by its intended consumer.
 
 Use a task-local script when a deterministic invariant would otherwise be checked manually more than once. Keep the script beside the task evidence until the work closes; promote it only when repeated future value clearly exceeds maintenance cost.
 

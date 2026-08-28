@@ -33,7 +33,11 @@ Store it under `.tp/work/` and refresh it when source evidence contradicts the c
 
 ## Durable context
 
-Use `<PRODUCT>_TP.md` as the product-scoped navigation hub. Link source-specific companions such as `<PRODUCT>_PRODUCT.md` and `<PRODUCT>_PCMS.md` when datasheets or change documents are provided. These files preserve provenance and traceability; the inspected TP, raw supporting documents, and runtime evidence remain the authorities for their own claims.
+Use `<PRODUCT>_TP_WIKI.md` as the product-scoped navigation hub. Link source-specific companions such as `<PRODUCT>_PRODUCT.md` and `<PRODUCT>_PCMS.md` when datasheets or change documents are provided. These files preserve provenance and traceability; the inspected TP, raw supporting documents, and runtime evidence remain the authorities for their own claims.
+
+Treat generated companions and flattened exports as navigation views with an explicit representation policy.
+Keep one canonical parser output per source, use canonical suffixes in names, and scan active documentation for retired variants or stale paths after a rename or consolidation.
+When a source page depends on spatial layout, preserve the source PDF or image as the authority and route topology or pin-association questions to visual review.
 
 ## Boundaries
 
@@ -44,4 +48,5 @@ Use `<PRODUCT>_TP.md` as the product-scoped navigation hub. Link source-specific
 
 ## Complete when
 
-Every proposed edit or conclusion is connected to its active consumer, the correct variant and authority are named, and every remaining unknown is either non-decision-relevant or surfaced to the user. When durable documents were warranted, their source register, cross-links, freshness state, and change trace are complete at the inspected scope.
+Every proposed edit or conclusion is connected to its active consumer, the correct variant and authority are named, and every remaining unknown is either non-decision-relevant or surfaced to the user.
+When durable documents were warranted, their source register, canonical names, cross-links, freshness state, representation policy, and change trace are complete at the inspected scope.

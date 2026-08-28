@@ -28,6 +28,10 @@ try { $zip.Entries | Select-Object -First 20 FullName, Length } finally { $zip.D
 
 Load `System.IO.Compression.FileSystem` first only on PowerShell versions that require it. For very large or tool-sensitive programs, a verified sibling copy can be cheaper and easier to compare than a ZIP.
 
+When constrained PowerShell, archive APIs, or shell quoting prevent reliable inspection, use a small `uv run python` probe with the standard-library `zipfile` module or expand the archive into a temporary directory.
+Compare expected relative paths, entry count, size, and hashes independently of the command that created the archive.
+Treat an archive that merely exists as unverified.
+
 ## Boundaries
 
 - A backup beside an in-place-edited file is acceptable only when the mutation cannot sweep it up.
@@ -37,4 +41,5 @@ Load `System.IO.Compression.FileSystem` first only on PowerShell versions that r
 
 ## Complete when
 
-The baseline exists, contains the expected source, is outside the mutation target, and a concrete restore path is known. Creation success without content inspection is incomplete.
+The baseline exists, contains the expected source, is outside the mutation target, has independently checked entries or hashes, and a concrete restore path is known.
+Creation success without content inspection is incomplete.

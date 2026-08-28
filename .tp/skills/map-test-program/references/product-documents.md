@@ -6,7 +6,7 @@ Create a small linked documentation set that helps the next engineer navigate th
 
 Use the confirmed product identifier as a filesystem-safe prefix. For product `AB12`, default to:
 
-- `AB12_TP.md`: current test-program navigation hub
+- `AB12_TP_WIKI.md`: current test-program navigation hub
 - `AB12_PRODUCT.md`: test-relevant product facts derived from supplied datasheet or product documentation
 - `AB12_PCMS.md`: normalized trace for supplied PCMS records or documents
 
@@ -20,11 +20,12 @@ Place the set in an existing user-approved documentation location. If none exist
 - A companion is a source-specific, test-relevant summary. It does not replace the raw document.
 - Preserve every raw supporting document unchanged. Record its path, displayed identifier or revision, date, applicable scope, and a checksum when practical.
 - Link a fact to the file, page or section, symbol, revision, or runtime record that supports it. Mark unsupported interpretations as `inferred` or `unknown`.
+- For layout-sensitive PDFs such as schematics, keep the PDF or image as source-only and use the companion for page navigation and verified labels, not inferred topology.
 - Link revision history to a focused diff or changed files and symbols. Summarize the effect instead of copying a full diff into Markdown.
 
 Use document state `draft`, `verified`, or `stale`. Use claim basis `inspected-source`, `runtime`, `user-stated`, `inferred`, or `unknown`; avoid numeric confidence scores.
 
-## Build `<PRODUCT>_TP.md`
+## Build `<PRODUCT>_TP_WIKI.md`
 
 Start with machine-readable identity and freshness:
 
