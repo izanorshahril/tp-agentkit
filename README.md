@@ -52,4 +52,11 @@ flowchart LR
 	Views --> Evidence
 ```
 
+## Future embedding reference
+
+For a future Graphify semantic-clustering path, use `BAAI/bge-small-en-v1.5` as the reference model and `ggml-org/bge-small-en-v1.5-Q8_0-GGUF` as the preferred local GGUF artifact.
+The intended contract is 384-dimensional vectors with CLS pooling, L2 normalization, and no query/passage prefix for clustering.
+Keep this as a reference while the knowledge dataset is still being optimized; any later implementation must approve the model revision, checksum, license, and output behavior before use.
+See [the embedding research note](.tp/knowledge/embedding-model-research.md) for the comparison and validation details.
+
 Agent guidance lives in [`AGENTS.md`](AGENTS.md). The `.tp` directory is intentionally tool-neutral even though it is not a standard agent configuration path.

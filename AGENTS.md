@@ -20,6 +20,15 @@ Understand the actual test program, make the smallest defensible change, and lea
 ## Context routing
 
 - For a TP task, read [`.tp/skills/INDEX.md`](.tp/skills/INDEX.md), then load every matching `SKILL.md` completely before acting.
+- When a repository or TP map is needed, run `uv tool run --from graphifyy graphify extract <target> --code-only --no-cluster --out .` from the workspace root, then use Graphify's root `graphify-out/` artifacts; use manual `rg`/`grep` searches only to validate results or resolve identified gaps.
+- Treat `graphify-out/` as tool output, not as a documentation source or a replacement for active-flow and runtime evidence.
+- Use QMD as the document search and retrieval companion to Graphify. The project-local `.qmd/index.yml` currently indexes `**/*.md` and uses the shared per-user model cache.
+- Choose the tool by question:
+	- **QMD**: find exact terms or concepts in Markdown specifications, datasheets, READMEs, mail, and derived documentation. Use `qmd search "<terms>" -c tp-agentkit` for fast keyword search, `qmd vsearch "<concept>" -c tp-agentkit` for semantic search, and `qmd query "<question>" -c tp-agentkit` for hybrid retrieval. Use `qmd get` or `qmd multi-get` to retrieve the cited text.
+	- **Graphify**: trace source-code relationships and active structure, such as callers/callees, symbol reachability, test-flow dependencies, communities, and hubs across C++ and tester-program files.
+	- **Both**: use QMD to locate the governing document or terminology, then Graphify to trace the implementation and active flow. Use this for limit/spec changes, coverage questions, source-versus-document discrepancies, and verification planning.
+- Keep the evidence boundary explicit: QMD results locate and retrieve text; Graphify artifacts navigate derived code structure. Neither proves runtime reachability, tester behavior, limits, or production coverage without source and runtime/evidence checks.
+- Refresh QMD with `qmd update` after indexed Markdown changes and `qmd embed` when new or changed documents need semantic retrieval. Refresh Graphify after source changes with `graphify update .`; compare its reported commit with the current revision before relying on the graph.
 - Read [`.tp/knowledge/INDEX.md`](.tp/knowledge/INDEX.md) only when its trigger matches the task; load only the named topic file.
 - Read [`.tp/work/context.md`](.tp/work/context.md) when resuming work or when privacy, user preference, environment capability, or an active checkpoint matters. It is a temporary cache: verify drift-prone facts.
 - Prefer `rg` and the environment over documentation caches for cheap facts such as paths, commands, symbols, and current file structure.

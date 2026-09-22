@@ -26,6 +26,7 @@ my_*.txt
 /.tp/knowledge/ur78.md
 
 # Build artifacts
+/graphify-out/
 *.pyc
 __pycache__/
 *.pdb
